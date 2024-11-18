@@ -1,0 +1,8 @@
+﻿bin/
+obj/
+/Web/appsettings.Development.json
+/Web/appsettings.json
+/Web/Web.http
+.idea
+/Web/Properties
+/Process_analysis.sln
