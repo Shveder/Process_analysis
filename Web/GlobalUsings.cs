@@ -1,0 +1,10 @@
+﻿global using System.Net;
+global using System.Security.Authentication;
+global using Application.DTO;
+global using Application.Exceptions;
+global using Serilog;
+global using Serilog.Events;
+global using Infrastructure.DatabaseContext;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Text.Json;

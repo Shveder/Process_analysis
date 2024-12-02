@@ -1,6 +1,6 @@
 ﻿namespace Core.Models;
 
-public class Notification
+public class Notification : BaseModel
 {
     /// <summary>
     /// Message of notification

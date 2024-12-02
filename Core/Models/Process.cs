@@ -16,4 +16,9 @@ public class Process : BaseModel
     /// Privicy of the process
     /// </summary>
     public bool Privicy { get; set; }
+    
+    /// <summary>
+    /// Company of the process
+    /// </summary>
+    public Company Company { get; set; }
 }

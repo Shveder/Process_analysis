@@ -1,6 +1,8 @@
-﻿namespace Infrastructure.Repository;
+﻿using Application.Interfaces;
 
-public class DbRepository(DataContext context)
+namespace Infrastructure.Repository;
+
+public class DbRepository(DataContext context) : IDbRepository
 {
     public IQueryable<T> Get<T>() where T : class, IHasId
     {

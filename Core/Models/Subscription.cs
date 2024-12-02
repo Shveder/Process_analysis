@@ -1,6 +1,6 @@
 ﻿namespace Core.Models;
 
-public class Subscription
+public class Subscription : BaseModel
 {
     /// <summary>
     /// User of subscription
