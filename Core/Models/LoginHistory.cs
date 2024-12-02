@@ -1,6 +1,6 @@
 namespace Core.Models;
 
-public class LoginHistory
+public class LoginHistory : BaseModel
 {
     /// <summary>
     /// Ip adress of user

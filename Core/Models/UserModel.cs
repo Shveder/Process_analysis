@@ -21,14 +21,4 @@ public class UserModel : BaseModel
     /// Role of user 
     /// </summary>
     public string Role { get; set; }
-    
-    /// <summary>
-    /// Block status of user
-    /// </summary>
-    public bool IsBlocked { get; set; }
-    
-    /// <summary>
-    /// Delete status of user
-    /// </summary>
-    public bool IsDeleted { get; set; }
 }

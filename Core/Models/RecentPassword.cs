@@ -1,6 +1,6 @@
 namespace Core.Models;
 
-public class RecentPassword
+public class RecentPassword : BaseModel
 {
     /// <summary>
     /// Recent password of user
