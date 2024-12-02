@@ -1,13 +1,11 @@
-﻿using Application.Services;
-
-namespace Web.Controllers;
+﻿namespace Web.Controllers;
 
 /// <summary>
 /// Controller responsible for user authorization, including login and registration functionalities.
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class AuthorizationController(AuthorizationService authorizationService) : ControllerBase
+public class AuthorizationController(IAuthorizationService authorizationService) : ControllerBase
 {
     /// <summary>
     /// Logs in a user by validating credentials and generating a JWT token.

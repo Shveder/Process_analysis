@@ -1,6 +1,6 @@
-namespace Core.Models;
+﻿namespace Application.DTO;
 
-public class User : BaseModel
+public class UserDto : BaseDto
 {
     /// <summary>
     /// Login of user

@@ -14,3 +14,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.IdentityModel.Tokens;
+global using Application.DTO.Base;

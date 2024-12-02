@@ -1,7 +1,3 @@
-using Application.Interfaces;
-using Application.Services;
-using Infrastructure.Repository;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
@@ -24,6 +20,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
+builder.Services.AddAutoMapper(typeof(UserProfile));
+
 // Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,6 +32,32 @@ builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 #endregion
 
 var app = builder.Build();
+
+#region Middleware
+app.UseCors();
+// Static Files Configuration
+var baseDirectory = Directory.GetParent(Environment.CurrentDirectory)?.ToString() ?? Environment.CurrentDirectory;
+var filesFolderPath = Path.Combine(baseDirectory, "files");
+Directory.CreateDirectory(filesFolderPath);
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(filesFolderPath),
+    RequestPath = "/files"
+});
+
+app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
+
+app.UseRouting();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+#endregion
 
 // Map Controller Routes
 app.MapControllers();
