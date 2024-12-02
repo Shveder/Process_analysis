@@ -1,2 +1,16 @@
 ﻿global using System.Linq.Expressions;
 global using Core.Models.Interfaces;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;
+global using Application.Exceptions;
+global using Core.Models;
+global using System.IdentityModel.Tokens.Jwt;
+global using Application.DTO;
+global using Application.Interfaces;
+global using AutoInterfaceAttributes;
+global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.IdentityModel.Tokens;

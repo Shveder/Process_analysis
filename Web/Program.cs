@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Services;
 using Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDbRepository, DbRepository>();
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 #endregion
 
