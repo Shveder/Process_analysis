@@ -5,7 +5,7 @@ public class Subscription : BaseModel
     /// <summary>
     /// User of subscription
     /// </summary>
-    public UserModel User { get; set; }
+    public User User { get; set; }
     
     /// <summary>
     /// Process of subscription

@@ -10,5 +10,5 @@ public class Notification : BaseModel
     /// <summary>
     /// User received message
     /// </summary>
-    public UserModel User { get; set; }
+    public User User { get; set; }
 }

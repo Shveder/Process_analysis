@@ -1,6 +1,6 @@
 namespace Core.Models;
 
-public class UserModel : BaseModel
+public class User : BaseModel
 {
     /// <summary>
     /// Login of user
@@ -21,4 +21,9 @@ public class UserModel : BaseModel
     /// Role of user 
     /// </summary>
     public string Role { get; set; }
+    
+    /// <summary>
+    /// Block status of user
+    /// </summary>
+    public bool IsBlocked { get; set; }
 }

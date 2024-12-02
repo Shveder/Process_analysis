@@ -10,5 +10,5 @@ public class RecentPassword : BaseModel
     /// <summary>
     /// Model of user
     /// </summary>
-    public UserModel User { get; set; }
+    public User User { get; set; }
 }
