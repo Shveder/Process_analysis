@@ -30,6 +30,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDbRepository, DbRepository>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IProcessService, ProcessService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 #endregion
 

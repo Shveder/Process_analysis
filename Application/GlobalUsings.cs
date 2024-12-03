@@ -17,3 +17,4 @@ global using Microsoft.IdentityModel.Tokens;
 global using Application.DTO.Base;
 global using System.Net.NetworkInformation;
 global using System.Net.Sockets;
+global using Common;

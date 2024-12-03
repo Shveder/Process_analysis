@@ -14,3 +14,4 @@ global using Application.Services;
 global using Infrastructure.Repository;
 global using Microsoft.Extensions.FileProviders;
 global using Web.Middlewares;
+global using Common;

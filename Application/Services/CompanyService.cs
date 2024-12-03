@@ -1,6 +1,4 @@
-﻿using Common;
-
-namespace Application.Services;
+﻿namespace Application.Services;
 
 [AutoInterface]
 public class CompanyService(IDbRepository repository, IMapper mapper) : ICompanyService

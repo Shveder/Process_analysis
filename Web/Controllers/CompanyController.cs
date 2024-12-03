@@ -1,17 +1,18 @@
-﻿using Common;
+﻿namespace Web.Controllers;
 
-namespace Web.Controllers;
-
+/// <summary>
+/// Controller responsible for process crud operations.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class CompanyController(ICompanyService companyService) : ControllerBase
 {
     /// <summary>
-    /// Retrieves a book by its ID.
+    /// Retrieves a company by its ID.
     /// </summary>
     /// <param name="id">The unique identifier of the company.</param>
     /// <returns>
-    /// The book details corresponding to the provided ID.
+    /// The company details corresponding to the provided ID.
     /// </returns>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ResponseDto<CompanyDto>), StatusCodes.Status200OK)]
@@ -24,11 +25,11 @@ public class CompanyController(ICompanyService companyService) : ControllerBase
     }
     
     /// <summary>
-    /// Creates a new book.
+    /// Creates a new company.
     /// </summary>
     /// <param name="dto">The DTO containing the information of the company to create.</param>
     /// <returns>
-    /// The created book details.
+    /// The created company details.
     /// </returns>
     [HttpPost]
     [ProducesResponseType(typeof(ResponseDto<CompanyDto>), StatusCodes.Status200OK)]
@@ -42,11 +43,11 @@ public class CompanyController(ICompanyService companyService) : ControllerBase
     }
 
     /// <summary>
-    /// Updates an existing book.
+    /// Updates an existing company.
     /// </summary>
     /// <param name="dto">The DTO containing the updated information of the company.</param>
     /// <returns>
-    /// The updated book details.
+    /// The updated company details.
     /// </returns>
     [HttpPut]
     [ProducesResponseType(typeof(ResponseDto<CompanyDto>), StatusCodes.Status200OK)]
@@ -60,11 +61,11 @@ public class CompanyController(ICompanyService companyService) : ControllerBase
     }
 
     /// <summary>
-    /// Deletes a book by its ID.
+    /// Deletes a company by its ID.
     /// </summary>
     /// <param name="id">The unique identifier of the company to delete.</param>
     /// <returns>
-    /// A success message if the book is deleted.
+    /// A success message if the company is deleted.
     /// </returns>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ResponseDto<string>), StatusCodes.Status200OK)]
