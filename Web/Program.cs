@@ -21,6 +21,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(CompanyProfile));
 
 // Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDbRepository, DbRepository>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 #endregion
 
