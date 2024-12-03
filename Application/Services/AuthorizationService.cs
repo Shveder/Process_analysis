@@ -19,6 +19,16 @@ public class AuthorizationService(IMapper mapper, IDbRepository repository, ILog
         if (user == null)
             throw new EntityNotFoundException("User not found or invalid credentials");
         
+        
+        var loginHistory = new LoginHistory
+        {
+            Ip = GetLocalIPv4Address(),
+            User = user
+        };
+
+        await repository.Add(loginHistory);
+        await repository.SaveChangesAsync();
+        
         var claims = new List<Claim>
         {
             new ("id", user.Id.ToString()),
@@ -71,11 +81,38 @@ public class AuthorizationService(IMapper mapper, IDbRepository repository, ILog
         var user = mapper.Map<User>(request);
         user.Password = request.Password;
         user.Salt = salt;
-        user.Role = "user"; 
+        user.Role = "user";
 
         await repository.Add(user);
         await repository.SaveChangesAsync();
         logger.LogInformation($"User created (Login: {request.Login})");
+    }
+    
+    static string GetLocalIPv4Address()
+    {
+        string localIPv4Address = null;
+
+        foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            if (networkInterface.OperationalStatus == OperationalStatus.Up)
+            {
+                foreach (var ipAddress in networkInterface.GetIPProperties().UnicastAddresses)
+                {
+                    if (ipAddress.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        localIPv4Address = ipAddress.Address.ToString();
+                        break;
+                    }
+                }
+            }
+
+            if (localIPv4Address != null)
+            {
+                break;
+            }
+        }
+
+        return localIPv4Address;
     }
 
     private async Task<bool> IsLoginUnique(string login)
