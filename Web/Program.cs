@@ -22,6 +22,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddAutoMapper(typeof(CompanyProfile));
+builder.Services.AddAutoMapper(typeof(CommentProfile));
+builder.Services.AddAutoMapper(typeof(IndicatorProfile));
+builder.Services.AddAutoMapper(typeof(ProcessProfile));
+builder.Services.AddAutoMapper(typeof(RecordProfile));
 
 // Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
@@ -34,6 +38,7 @@ builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IBaseService, BaseService>();
 
 #endregion
 

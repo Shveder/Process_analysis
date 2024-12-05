@@ -18,6 +18,12 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     
     public DbSet<User> Users { get; set; }
     
+    public DbSet<Comment> Comments { get; set; }
+    
+    public DbSet<Indicator> Indicators { get; set; }
+    
+    public DbSet<Record> Records { get; set; }
+    
     public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
     {
         public DataContext CreateDbContext(string[] args)

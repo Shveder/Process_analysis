@@ -15,7 +15,7 @@ public class ProcessService(IDbRepository repository, IMapper mapper) : IProcess
     
     public async Task<IEnumerable<ProcessDto>> GetAllAsync()
     {
-        var entities = repository.GetAll<Process>().AsQueryable();
+        var entities = repository.GetAll<Process>().Include(process => process.Company).AsQueryable();
         var dtos = mapper.Map<IEnumerable<ProcessDto>>(entities);
         
         return dtos;
@@ -35,12 +35,13 @@ public class ProcessService(IDbRepository repository, IMapper mapper) : IProcess
     
     public async Task<ProcessDto> PostAsync(ProcessDto dto)
     {
-        var company = mapper.Map<Process>(dto);
+        var process = mapper.Map<Process>(dto);
+        process.Company = GetCompanyById(dto.CompanyId);
 
-        await repository.Add(company);
+        await repository.Add(process);
         await repository.SaveChangesAsync();
         
-        return mapper.Map<ProcessDto>(company);
+        return mapper.Map<ProcessDto>(process);
     }
     
     public async Task<ProcessDto> PutAsync(ProcessDto dto)
@@ -56,5 +57,14 @@ public class ProcessService(IDbRepository repository, IMapper mapper) : IProcess
         await repository.SaveChangesAsync();
 
         return dto;
+    }
+    
+    public Company GetCompanyById(Guid id)
+    {
+        var company = repository.Get<Company>(model => model.Id == id).FirstOrDefault();
+        if (company == null)
+            throw new IncorrectDataException("There is not company with this Id");
+        
+        return company;
     }
 }

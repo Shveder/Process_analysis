@@ -1,7 +1,9 @@
-﻿namespace Application.Services;
+﻿using Application.Services.Base;
+
+namespace Application.Services;
 
 [AutoInterface]
-public class UserService(IDbRepository repository) : IUserService
+public class UserService(IDbRepository repository, IMapper mapper, IBaseService baseService) : IUserService
 {
     public async Task ChangePassword(ChangePasswordRequest request)
     {
@@ -55,5 +57,39 @@ public class UserService(IDbRepository repository) : IUserService
             
             return sb.ToString();
         }
+    }
+    
+    public async Task<CommentDto> AddComment(CommentDto dto)
+    {
+        var comment = mapper.Map<Comment>(dto);
+        comment.Process = baseService.GetProcessById(dto.ProcessId);
+        comment.User = baseService.GetUserById(dto.UserId);
+
+        await repository.Add(comment);
+        await repository.SaveChangesAsync();
+        
+        return mapper.Map<CommentDto>(comment);
+    }
+    
+    public async Task<IndicatorDto> AddIndicator(IndicatorDto dto)
+    {
+        var indicator = mapper.Map<Indicator>(dto);
+        indicator.Process = baseService.GetProcessById(dto.ProcessId);
+
+        await repository.Add(indicator);
+        await repository.SaveChangesAsync();
+        
+        return mapper.Map<IndicatorDto>(indicator);
+    }
+    
+    public async Task<RecordDto> AddRecord(RecordDto dto)
+    {
+        var record = mapper.Map<Record>(dto);
+        record.Indicator = baseService.GetIndicatorById(dto.IndicatorId);
+
+        await repository.Add(record);
+        await repository.SaveChangesAsync();
+        
+        return mapper.Map<RecordDto>(record);
     }
 }

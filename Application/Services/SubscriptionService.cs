@@ -1,14 +1,16 @@
-﻿namespace Application.Services;
+﻿using Application.Services.Base;
+
+namespace Application.Services;
 
 [AutoInterface]
-public class SubscriptionService(IDbRepository repository) : ISubscriptionService
+public class SubscriptionService(IDbRepository repository, IBaseService baseService) : ISubscriptionService
 {
      public async Task AddSubscription(SubscriptionRequest request)
     {
         if (GetIsSubscribed(request))
             throw new IncorrectDataException("You already subscribed.");
         
-        var user = GetUserById(request.UserId);
+        var user = baseService.GetUserById(request.UserId);
         var process = GetProcessById(request.ProcessId);
 
         var subscription = new Subscription()
@@ -25,7 +27,7 @@ public class SubscriptionService(IDbRepository repository) : ISubscriptionServic
         if (!GetIsSubscribed(request))
             throw new IncorrectDataException("You are not subscribed.");
         
-        var user = GetUserById(request.UserId);
+        var user = baseService.GetUserById(request.UserId);
         var process = GetProcessById(request.ProcessId);
 
         var subscription = repository.Get<Subscription>(subscription =>
@@ -41,7 +43,7 @@ public class SubscriptionService(IDbRepository repository) : ISubscriptionServic
 
     public async Task Notify(Guid userId, string text)
     {
-        var user = GetUserById(userId);
+        var user = baseService.GetUserById(userId);
         var notification = new Notification()
         {
             User = user,
@@ -52,7 +54,7 @@ public class SubscriptionService(IDbRepository repository) : ISubscriptionServic
     }
     public bool GetIsSubscribed(SubscriptionRequest request)
     {
-        var user = GetUserById(request.UserId);
+        var user = baseService.GetUserById(request.UserId);
         var process = GetProcessById(request.ProcessId);
     
         var subscription = repository.Get<Subscription>(subscription =>
@@ -71,14 +73,6 @@ public class SubscriptionService(IDbRepository repository) : ISubscriptionServic
         return subscriptions;
     }
     
-    private User GetUserById(Guid id)
-    {
-        var user = repository.Get<User>(model => model.Id == id).FirstOrDefault();
-        if (user == null)
-            throw new IncorrectDataException("There is no user with this id");
-        
-        return user;
-    }
     private Process GetProcessById(Guid id)
     {
         var process = repository.Get<Process>(model => model.Id == id).FirstOrDefault();

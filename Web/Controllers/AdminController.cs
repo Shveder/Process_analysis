@@ -5,7 +5,7 @@
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class AdminController(IAdminService adminService) : ControllerBase
+public class AdminController(IAdminService adminService, IBaseService baseService) : ControllerBase
 {
     /// <summary>
     /// Retrieves a list of all users in the system.
@@ -70,7 +70,7 @@ public class AdminController(IAdminService adminService) : ControllerBase
     [ProducesResponseType(typeof(ProcessDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProcessById(Guid id)
     {
-        var process = adminService.GetProcessById(id);
+        var process = baseService.GetProcessById(id);
         
         return Ok(process);
     }
@@ -85,34 +85,6 @@ public class AdminController(IAdminService adminService) : ControllerBase
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         await adminService.DeleteUser(id);
-        
-        return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
-    }
-
-    /// <summary>
-    /// Deletes a specific company by its ID.
-    /// </summary>
-    /// <param name="id">The company's unique identifier.</param>
-    /// <returns>A success message.</returns>
-    [HttpDelete("DeleteCompany")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteCompany(Guid id)
-    {
-        await adminService.DeleteCompany(id);
-        
-        return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
-    }
-
-    /// <summary>
-    /// Deletes a specific process by its ID.
-    /// </summary>
-    /// <param name="id">The process's unique identifier.</param>
-    /// <returns>A success message.</returns>
-    [HttpDelete("DeleteProcess")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteProcess(Guid id)
-    {
-        await adminService.DeleteProcess(id);
         
         return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
     }

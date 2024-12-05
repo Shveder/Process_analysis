@@ -18,7 +18,7 @@ public class ProcessDto : BaseDto
     public bool Privicy { get; set; }
     
     /// <summary>
-    /// Company of the process
+    /// Company ID of the process
     /// </summary>
-    public Company Company { get; set; }
+    public Guid CompanyId { get; set; }
 }
