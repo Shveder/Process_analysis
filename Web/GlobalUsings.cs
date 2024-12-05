@@ -16,3 +16,6 @@ global using Microsoft.Extensions.FileProviders;
 global using Web.Middlewares;
 global using Common;
 global using Application.Services.Base;
+global using System.Text;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
