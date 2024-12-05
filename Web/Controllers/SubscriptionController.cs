@@ -42,7 +42,7 @@ public class SubscriptionController(ISubscriptionService subscriptionService) : 
     {
         await subscriptionService.DeleteSubscription(request);
 
-        return Ok("Подписка удалена");
+        return Ok("Subscription deleted");
     }
     
     /// <summary>

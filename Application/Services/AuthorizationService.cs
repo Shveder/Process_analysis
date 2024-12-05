@@ -19,7 +19,6 @@ public class AuthorizationService(IMapper mapper, IDbRepository repository, ILog
         if (user == null)
             throw new EntityNotFoundException("User not found or invalid credentials");
         
-        
         var loginHistory = new LoginHistory
         {
             Ip = GetLocalIPv4Address(),
