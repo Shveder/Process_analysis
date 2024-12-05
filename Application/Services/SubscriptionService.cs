@@ -1,6 +1,4 @@
-﻿using Application.Services.Base;
-
-namespace Application.Services;
+﻿namespace Application.Services;
 
 [AutoInterface]
 public class SubscriptionService(IDbRepository repository, IBaseService baseService) : ISubscriptionService

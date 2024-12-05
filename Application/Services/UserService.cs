@@ -1,6 +1,4 @@
-﻿using Application.Services.Base;
-
-namespace Application.Services;
+﻿namespace Application.Services;
 
 [AutoInterface]
 public class UserService(IDbRepository repository, IMapper mapper, IBaseService baseService) : IUserService
