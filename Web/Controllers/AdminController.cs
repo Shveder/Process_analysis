@@ -92,18 +92,38 @@ public class AdminController(IAdminService adminService, IBaseService baseServic
     /// <summary>
     /// Updates an existing user.
     /// </summary>
-    /// <param name="dto">The DTO containing the updated information of the user.</param>
+    /// <param name="request">The DTO containing the updated information of the user.</param>
     /// <returns>
     /// The updated user details.
     /// </returns>
     [HttpPut]
+    [Route("ChangeRole")]
     [ProducesResponseType(typeof(ResponseDto<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PutAsync([FromBody] UserDto dto)
+    public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleRequest request)
     {
-        var bookDto = await adminService.PutUserAsync(dto);
+        var userDto = await adminService.ChangeRole(request);
         
-        return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResultPut, data: bookDto));
+        return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResultPut, data: userDto));
+    }
+    
+    /// <summary>
+    /// Updates status of an existing user.
+    /// </summary>
+    /// <param name="request">The DTO containing the updated information of the user.</param>
+    /// <returns>
+    /// The updated user details.
+    /// </returns>
+    [HttpPut]
+    [Route("SetUserBlockStatus")]
+    [ProducesResponseType(typeof(ResponseDto<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SetBlockStatus([FromBody] SetBlockStatusRequest request)
+    {
+        var userDto = await adminService.SetBlockStatus(request);
+        
+        return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResultPut, data:userDto));
     }
 }
