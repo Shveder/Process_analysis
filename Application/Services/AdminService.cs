@@ -44,18 +44,33 @@ public class AdminService(IDbRepository repository, IMapper mapper) : IAdminServ
         return user;
     }
     
-    public async Task<UserDto> PutUserAsync(UserDto dto)
+    public async Task<UserDto> ChangeRole(ChangeRoleRequest request)
     {
-        var existingUser = repository.Get<User>(e => e.Id == dto.Id).FirstOrDefault();
+        var existingUser = repository.Get<User>(e => e.Id == request.Id).FirstOrDefault();
         if (existingUser == null)
             throw new EntityNotFoundException(CommonStrings.NotFoundResult);
         
-        mapper.Map(dto, existingUser);
+        existingUser.Role = request.Role;
         existingUser.DateUpdated = DateTime.UtcNow;
         
         await repository.Update(existingUser);
         await repository.SaveChangesAsync();
 
-        return dto;
+        return mapper.Map<UserDto>(existingUser);
+    }
+    
+    public async Task<UserDto> SetBlockStatus(SetBlockStatusRequest request)
+    {
+        var existingUser = repository.Get<User>(e => e.Id == request.Id).FirstOrDefault();
+        if (existingUser == null)
+            throw new EntityNotFoundException(CommonStrings.NotFoundResult);
+        
+        existingUser.IsBlocked = request.Status;
+        existingUser.DateUpdated = DateTime.UtcNow;
+        
+        await repository.Update(existingUser);
+        await repository.SaveChangesAsync();
+
+        return mapper.Map<UserDto>(existingUser);
     }
 }

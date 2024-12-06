@@ -81,6 +81,7 @@ public class AuthorizationService(IMapper mapper, IDbRepository repository, ILog
         user.Password = request.Password;
         user.Salt = salt;
         user.Role = "user";
+        user.IsBlocked = false;
 
         await repository.Add(user);
         await repository.SaveChangesAsync();

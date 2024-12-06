@@ -21,4 +21,9 @@ public class User : BaseModel
     /// Role of user 
     /// </summary>
     public string Role { get; set; }
+    
+    /// <summary>
+    /// Block status of user
+    /// </summary>
+    public bool IsBlocked { get; set; }
 }
