@@ -90,4 +90,34 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         
         return mapper.Map<RecordDto>(record);
     }
+
+    public async Task<IEnumerable<Notification>> GetAllNotifications(Guid id)
+    {
+        var entities = repository.GetAll<Notification>()
+            .Where(notify => notify.User.Id == id).AsQueryable();
+        
+        return entities;
+    }
+    
+    public async Task DeleteNotification(Guid id)
+    {
+        var entity = await repository.Get<Notification>(e => e.Id == id).FirstOrDefaultAsync();
+        if (entity is null)
+            throw new EntityNotFoundException($"{nameof(Notification)} {CommonStrings.NotFoundResult}");
+
+        await repository.Delete(entity);
+        await repository.SaveChangesAsync();
+    }
+    
+    public async Task<UserDto> GetUserById(Guid id)
+    {
+        var entity = await repository.Get<User>(e => e.Id == id)
+            .FirstOrDefaultAsync();
+        if (entity is null)
+            throw new EntityNotFoundException(CommonStrings.NotFoundResult);
+        
+        var dto = mapper.Map<UserDto>(entity);
+       
+        return dto;
+    }
 }

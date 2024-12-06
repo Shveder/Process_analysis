@@ -1,7 +1,12 @@
 ﻿namespace Application.DTO;
 
-public class ChangePasswordRequest : BaseDto
+public class ChangePasswordRequest 
 {
+    /// <summary>
+    /// ID of user
+    /// </summary>
+    public Guid Id { get; set; }
+    
     /// <summary>
     /// Previous password of user
     /// </summary>

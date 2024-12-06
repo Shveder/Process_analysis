@@ -82,4 +82,52 @@ public class UserController(IUserService userService) : ControllerBase
         
         return Ok(new ResponseDto<RecordDto>(CommonStrings.SuccessResultPost, data: recordDto));
     }
+    
+    /// <summary>
+    /// Retrieves all notifications.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all notifications.</returns>
+    [HttpGet("GetAllNotifications")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetAllNotifications(Guid userId)
+    {
+        var entity = await userService.GetAllNotifications(userId);
+        
+        return Ok(new ResponseDto<IEnumerable<Notification>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Deletes a notification by its ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the notification to delete.</param>
+    /// <returns>
+    /// A success message if the notification is deleted.
+    /// </returns>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(ResponseDto<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteNotification(Guid id)
+    {
+        await userService.DeleteNotification(id);
+        
+        return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
+    }
+    
+    /// <summary>
+    /// Retrieves a user by its ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the user.</param>
+    /// <returns>
+    /// The user details corresponding to the provided ID.
+    /// </returns>
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ResponseDto<ProcessDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var userDto = await userService.GetUserById(id);
+        
+        return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResult, data: userDto));
+    }
 }
