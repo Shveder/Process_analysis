@@ -1,7 +1,7 @@
 ﻿namespace Application.Services;
 
 [AutoInterface]
-public class CompanyService(IDbRepository repository, IMapper mapper) : ICompanyService
+public class CompanyService(IDbRepository repository, IMapper mapper, IBaseService baseService) : ICompanyService
 {
     public async Task DeleteByIdAsync(Guid id)
     {
@@ -15,7 +15,16 @@ public class CompanyService(IDbRepository repository, IMapper mapper) : ICompany
     
     public async Task<IEnumerable<CompanyDto>> GetAllAsync()
     {
-        var entities = repository.GetAll<Company>().AsQueryable();
+        var entities = repository.GetAll<Company>().Include(c => c.User).AsQueryable();
+        var dtos = mapper.Map<IEnumerable<CompanyDto>>(entities);
+        
+        return dtos;
+    }
+    
+    public async Task<IEnumerable<CompanyDto>> GetCompaniesByUserId(Guid userId)
+    {
+        var entities = repository.GetAll<Company>().Where(company => company.User.Id == userId)
+            .Include(c => c.User).AsQueryable();
         var dtos = mapper.Map<IEnumerable<CompanyDto>>(entities);
         
         return dtos;
@@ -36,6 +45,7 @@ public class CompanyService(IDbRepository repository, IMapper mapper) : ICompany
     public async Task<CompanyDto> PostAsync(CompanyDto dto)
     {
         var company = mapper.Map<Company>(dto);
+        company.User = baseService.GetUserById(dto.UserId);
 
         await repository.Add(company);
         await repository.SaveChangesAsync();

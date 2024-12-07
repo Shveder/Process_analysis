@@ -6,15 +6,15 @@ namespace Web.Controllers;
 /// Controller responsible for user operations.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class UserController(IUserService userService) : ControllerBase
 {
     /// <summary>
-    /// Registers a new user with the provided information.
+    /// Changes a password of user.
     /// </summary>
-    /// <param name="request">The registration request containing user details.</param>
+    /// <param name="request">The request containing user details.</param>
     /// <returns>
-    /// A success message if registration is successful.
+    /// A success message if changing is successful.
     /// </returns>
     [HttpPut("ChangePassword")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -129,5 +129,22 @@ public class UserController(IUserService userService) : ControllerBase
         var userDto = await userService.GetUserById(id);
         
         return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResult, data: userDto));
+    }
+    
+    /// <summary>
+    /// Changes a login of user.
+    /// </summary>
+    /// <param name="request">The request containing user details.</param>
+    /// <returns>
+    /// A success message if changing is successful.
+    /// </returns>
+    [HttpPut("ChangeLogin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeLogin([FromBody] ChangeLoginRequest request)
+    {
+        await userService.ChangeLogin(request);
+
+        return Ok("Login changed");
     }
 }

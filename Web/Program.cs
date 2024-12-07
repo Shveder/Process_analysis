@@ -60,6 +60,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 #endregion
 

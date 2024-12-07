@@ -5,7 +5,7 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
 {
     public async Task ChangePassword(ChangePasswordRequest request)
     {
-        var user = await repository.Get<User>(model => model.Id == request.Id).FirstOrDefaultAsync();
+        var user = baseService.GetUserById(request.Id);
 
         string prevPassword = request.PreviousPassword; 
         prevPassword = Hash(prevPassword);
@@ -109,6 +109,23 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         await repository.SaveChangesAsync();
     }
     
+    public async Task ChangeLogin(ChangeLoginRequest request)
+    {
+        var user = baseService.GetUserById(request.Id);
+
+        if (request.Login.Length is < 4 or > 32)
+            throw new IncorrectDataException("Login must be between 4 and 32 characters long!");
+        
+        if (await IsLoginUnique(request.Login))
+            throw new IncorrectDataException("There is already a user with this login in the system");
+
+        user.Login = request.Login;
+        user.DateUpdated = DateTime.UtcNow;
+        
+        await repository.Update(user);
+        await repository.SaveChangesAsync();
+    }
+    
     public async Task<UserDto> GetUserById(Guid id)
     {
         var entity = await repository.Get<User>(e => e.Id == id)
@@ -119,5 +136,12 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         var dto = mapper.Map<UserDto>(entity);
        
         return dto;
+    }
+    
+    private async Task<bool> IsLoginUnique(string login)
+    {
+        var user = await repository.Get<User>(model => model.Login == login).FirstOrDefaultAsync();
+        
+        return user != null;
     }
 }

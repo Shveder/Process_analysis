@@ -4,7 +4,7 @@
 /// Controller responsible for process crud operations.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class CompanyController(ICompanyService companyService) : ControllerBase
 {
     /// <summary>
@@ -87,6 +87,20 @@ public class CompanyController(ICompanyService companyService) : ControllerBase
     public virtual async Task<IActionResult> GetAllAsync()
     {
         var entity = await companyService.GetAllAsync();
+        
+        return Ok(new ResponseDto<IEnumerable<CompanyDto>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Retrieves user companies.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of user companies.</returns>
+    [HttpGet("GetCompaniesByUserId")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetCompaniesByUserId(Guid userId)
+    {
+        var entity = await companyService.GetCompaniesByUserId(userId);
         
         return Ok(new ResponseDto<IEnumerable<CompanyDto>>(CommonStrings.SuccessResult, data: entity));
     }

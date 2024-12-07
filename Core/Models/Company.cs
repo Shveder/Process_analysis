@@ -16,4 +16,9 @@ public class Company : BaseModel
     /// Email of the company
     /// </summary>    
     public string Email { get; set; }
+    
+    /// <summary>
+    /// Owner of company
+    /// </summary>    
+    public User User { get; set; }
 }

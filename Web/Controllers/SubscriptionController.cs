@@ -4,7 +4,7 @@
 /// Controller responsible for add, delete and check subscription.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class SubscriptionController(ISubscriptionService subscriptionService) : ControllerBase
 {
     /// <summary>

@@ -16,4 +16,9 @@ public class CompanyDto : BaseDto
     /// Email of the company
     /// </summary>    
     public string Email { get; set; }
+    
+    /// <summary>
+    /// Owner Id
+    /// </summary>    
+    public Guid UserId { get; set; }
 }
