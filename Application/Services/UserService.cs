@@ -174,4 +174,13 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         await repository.Delete(entity);
         await repository.SaveChangesAsync();
     }
+    
+    public async Task<IEnumerable<Comment>> GetCommentsByProcessId(Guid processId)
+    {
+        var entities = repository.GetAll<Comment>()
+            .Where(i => i.Process.Id == processId)
+            .Include(c => c.User).AsQueryable();
+
+        return entities;
+    }
 }

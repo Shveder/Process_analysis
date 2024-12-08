@@ -13,12 +13,11 @@ public class ProcessService(IDbRepository repository, IMapper mapper) : IProcess
         await repository.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<ProcessDto>> GetAllAsync()
+    public async Task<IEnumerable<Process>> GetAllAsync()
     {
         var entities = repository.GetAll<Process>().Include(process => process.Company).AsQueryable();
-        var dtos = mapper.Map<IEnumerable<ProcessDto>>(entities);
         
-        return dtos;
+        return entities;
     }
     
     public async Task<ProcessDto> GetByIdAsync(Guid id)

@@ -88,6 +88,6 @@ public class ProcessController(IProcessService processService) : ControllerBase
     {
         var entity = await processService.GetAllAsync();
         
-        return Ok(new ResponseDto<IEnumerable<ProcessDto>>(CommonStrings.SuccessResult, data: entity));
+        return Ok(new ResponseDto<IEnumerable<Process>>(CommonStrings.SuccessResult, data: entity));
     }
 }

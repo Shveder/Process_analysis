@@ -192,4 +192,18 @@ public class UserController(IUserService userService) : ControllerBase
         
         return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
     }
+    
+    /// <summary>
+    /// Retrieves all comments by process ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all process comments.</returns>
+    [HttpGet("GetCommentsByProcessId")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetCommentsByProcessId(Guid processId)
+    {
+        var entity = await userService.GetCommentsByProcessId(processId);
+            
+        return Ok(new ResponseDto<IEnumerable<Comment>>(CommonStrings.SuccessResult, data: entity));
+    }
 }
