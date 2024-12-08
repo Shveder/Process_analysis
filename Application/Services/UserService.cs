@@ -183,4 +183,13 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
 
         return entities;
     }
+    
+    public async Task<IEnumerable<Record>> GetRecordsByIndicatorId(Guid indicatorId)
+    {
+        var entities = repository.GetAll<Record>()
+            .Where(i => i.Indicator.Id == indicatorId)
+            .Include(c => c.Indicator).AsQueryable();
+
+        return entities;
+    }
 }

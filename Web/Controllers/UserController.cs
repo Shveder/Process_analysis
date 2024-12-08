@@ -25,7 +25,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         return Ok("Password changed");
     }
-    
+
     /// <summary>
     /// Creates a new comment.
     /// </summary>
@@ -41,10 +41,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> AddComment([FromBody] CommentDto dto)
     {
         var commentDto = await userService.AddComment(dto);
-        
+
         return Ok(new ResponseDto<CommentDto>(CommonStrings.SuccessResultPost, data: commentDto));
     }
-    
+
     /// <summary>
     /// Creates a new indicator to process.
     /// </summary>
@@ -60,10 +60,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> AddIndicator([FromBody] IndicatorDto dto)
     {
         var indicatorDto = await userService.AddIndicator(dto);
-        
+
         return Ok(new ResponseDto<IndicatorDto>(CommonStrings.SuccessResultPost, data: indicatorDto));
     }
-    
+
     /// <summary>
     /// Creates a new record to indicator.
     /// </summary>
@@ -79,10 +79,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> AddRecord([FromBody] RecordDto dto)
     {
         var recordDto = await userService.AddRecord(dto);
-        
+
         return Ok(new ResponseDto<RecordDto>(CommonStrings.SuccessResultPost, data: recordDto));
     }
-    
+
     /// <summary>
     /// Retrieves all notifications.
     /// </summary>
@@ -93,10 +93,10 @@ public class UserController(IUserService userService) : ControllerBase
     public virtual async Task<IActionResult> GetAllNotifications(Guid userId)
     {
         var entity = await userService.GetAllNotifications(userId);
-        
+
         return Ok(new ResponseDto<IEnumerable<Notification>>(CommonStrings.SuccessResult, data: entity));
     }
-    
+
     /// <summary>
     /// Deletes a notification by its ID.
     /// </summary>
@@ -110,10 +110,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> DeleteNotification(Guid id)
     {
         await userService.DeleteNotification(id);
-        
+
         return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
     }
-    
+
     /// <summary>
     /// Retrieves a user by its ID.
     /// </summary>
@@ -127,10 +127,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> GetUserById(Guid id)
     {
         var userDto = await userService.GetUserById(id);
-        
+
         return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResult, data: userDto));
     }
-    
+
     /// <summary>
     /// Changes a login of user.
     /// </summary>
@@ -147,7 +147,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         return Ok("Login changed");
     }
-    
+
     /// <summary>
     /// Retrieves all processes by user ID.
     /// </summary>
@@ -158,10 +158,10 @@ public class UserController(IUserService userService) : ControllerBase
     public virtual async Task<IActionResult> GetUserProcesses(Guid userId)
     {
         var entity = await userService.GetUserProcesses(userId);
-            
+
         return Ok(new ResponseDto<IEnumerable<Process>>(CommonStrings.SuccessResult, data: entity));
     }
-    
+
     /// <summary>
     /// Retrieves all indicators by process ID.
     /// </summary>
@@ -172,10 +172,10 @@ public class UserController(IUserService userService) : ControllerBase
     public virtual async Task<IActionResult> GetIndicatorsOfProcess(Guid processId)
     {
         var entity = await userService.GetIndicatorsOfProcess(processId);
-            
+
         return Ok(new ResponseDto<IEnumerable<IndicatorDto>>(CommonStrings.SuccessResult, data: entity));
     }
-    
+
     /// <summary>
     /// Deletes a indicator by its ID.
     /// </summary>
@@ -189,10 +189,10 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> DeleteIndicator(Guid id)
     {
         await userService.DeleteIndicatorByIdAsync(id);
-        
+
         return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
     }
-    
+
     /// <summary>
     /// Retrieves all comments by process ID.
     /// </summary>
@@ -203,7 +203,21 @@ public class UserController(IUserService userService) : ControllerBase
     public virtual async Task<IActionResult> GetCommentsByProcessId(Guid processId)
     {
         var entity = await userService.GetCommentsByProcessId(processId);
-            
+
         return Ok(new ResponseDto<IEnumerable<Comment>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Retrieves all records by indicator ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all process comments.</returns>
+    [HttpGet("GetRecordsByIndicatorId")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetRecordsByIndicatorId(Guid indicatorId)
+    {
+        var entity = await userService.GetRecordsByIndicatorId(indicatorId);
+
+        return Ok(new ResponseDto<IEnumerable<Record>>(CommonStrings.SuccessResult, data: entity));
     }
 }
