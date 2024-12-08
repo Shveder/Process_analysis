@@ -147,4 +147,49 @@ public class UserController(IUserService userService) : ControllerBase
 
         return Ok("Login changed");
     }
+    
+    /// <summary>
+    /// Retrieves all processes by user ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all user processes.</returns>
+    [HttpGet("GetUserProcesses")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetUserProcesses(Guid userId)
+    {
+        var entity = await userService.GetUserProcesses(userId);
+            
+        return Ok(new ResponseDto<IEnumerable<Process>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Retrieves all indicators by process ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all process indicators.</returns>
+    [HttpGet("GetIndicatorsOfProcess")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetIndicatorsOfProcess(Guid processId)
+    {
+        var entity = await userService.GetIndicatorsOfProcess(processId);
+            
+        return Ok(new ResponseDto<IEnumerable<IndicatorDto>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Deletes a indicator by its ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the indicator to delete.</param>
+    /// <returns>
+    /// A success message if the indicator is deleted.
+    /// </returns>
+    [HttpDelete("DeleteIndicator/{id:guid}")]
+    [ProducesResponseType(typeof(ResponseDto<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteIndicator(Guid id)
+    {
+        await userService.DeleteIndicatorByIdAsync(id);
+        
+        return Ok(new ResponseDto<string>(CommonStrings.SuccessResultDelete));
+    }
 }

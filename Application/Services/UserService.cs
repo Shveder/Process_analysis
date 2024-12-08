@@ -144,4 +144,34 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         
         return user != null;
     }
+    
+    public async Task<IEnumerable<Process>> GetUserProcesses(Guid userId)
+    {
+        var companies = repository.GetAll<Company>()
+            .Where(c => c.User.Id == userId);
+
+        var processes = companies
+            .SelectMany(c => repository.GetAll<Process>().Where(p => p.Company.Id == c.Id).Include(p=>p.Company));
+
+        return await Task.FromResult(processes);
+    }
+
+    public async Task<IEnumerable<IndicatorDto>> GetIndicatorsOfProcess(Guid processId)
+    {
+        var entities = repository.GetAll<Indicator>()
+                .Where(i => i.Process.Id == processId).AsQueryable();
+        var dtos = mapper.Map<IEnumerable<IndicatorDto>>(entities);
+        
+        return dtos;
+    }
+    
+    public async Task DeleteIndicatorByIdAsync(Guid id)
+    {
+        var entity = await repository.Get<Indicator>(e => e.Id == id).FirstOrDefaultAsync();
+        if (entity is null)
+            throw new EntityNotFoundException($"{nameof(Process)} {CommonStrings.NotFoundResult}");
+
+        await repository.Delete(entity);
+        await repository.SaveChangesAsync();
+    }
 }
