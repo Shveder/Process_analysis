@@ -62,9 +62,9 @@ public class SubscriptionService(IDbRepository repository, IBaseService baseServ
         return subscription != null;
     }
 
-    public async Task<IEnumerable<Subscription>> GetAllSubscribers(Guid businessId)
+    public async Task<IEnumerable<Subscription>> GetAllSubscribers(Guid processId)
     {
-        var process = GetProcessById(businessId);
+        var process = GetProcessById(processId);
         var subscriptions = await repository.Get<Subscription>(s =>
             s.Process == process).Include(s => s.User).ToListAsync();
         

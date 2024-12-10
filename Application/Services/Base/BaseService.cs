@@ -32,7 +32,8 @@ public class BaseService(IDbRepository repository) : IBaseService
     
     public Indicator GetIndicatorById(Guid id)
     {
-        var indicator = repository.Get<Indicator>(model => model.Id == id).FirstOrDefault();
+        var indicator = repository.Get<Indicator>(model => model.Id == id)
+            .Include(i => i.Process).FirstOrDefault();
         if (indicator == null)
             throw new IncorrectDataException("There is no indicator with this id");
         

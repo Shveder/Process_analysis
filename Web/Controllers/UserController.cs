@@ -104,7 +104,8 @@ public class UserController(IUserService userService) : ControllerBase
     /// <returns>
     /// A success message if the notification is deleted.
     /// </returns>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete]
+    [Route("DeleteNotification")]
     [ProducesResponseType(typeof(ResponseDto<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteNotification(Guid id)
@@ -219,5 +220,31 @@ public class UserController(IUserService userService) : ControllerBase
         var entity = await userService.GetRecordsByIndicatorId(indicatorId);
 
         return Ok(new ResponseDto<IEnumerable<Record>>(CommonStrings.SuccessResult, data: entity));
+    }
+    
+    /// <summary>
+    /// Retrieves count of notifications by user ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all user.</returns>
+    [HttpGet("GetCountOfNotifications")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetCountOfNotifications(Guid userId)
+    {
+        return Ok(userService.GetCountOfNotifications(userId));
+    }
+    
+    /// <summary>
+    /// Retrieves notifications by user ID.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all notifications.</returns>
+    [HttpGet("GetNotifications")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetNotifications(Guid userId)
+    {
+        var entity = await userService.GetNotifications(userId);
+        
+        return Ok(new ResponseDto<IEnumerable<Notification>>(CommonStrings.SuccessResult, data: entity));
     }
 }

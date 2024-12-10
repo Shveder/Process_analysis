@@ -1,7 +1,8 @@
 ﻿namespace Application.Services;
 
 [AutoInterface]
-public class UserService(IDbRepository repository, IMapper mapper, IBaseService baseService) : IUserService
+public class UserService(IDbRepository repository, IMapper mapper, IBaseService baseService,
+    ISubscriptionService subscriptionService) : IUserService
 {
     public async Task ChangePassword(ChangePasswordRequest request)
     {
@@ -73,6 +74,16 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
     {
         var indicator = mapper.Map<Indicator>(dto);
         indicator.Process = baseService.GetProcessById(dto.ProcessId);
+        
+        var subs = await subscriptionService.GetAllSubscribers(indicator.Process.Id);
+
+        foreach (var sub in subs)
+        {
+            await subscriptionService.Notify(sub.User.Id,
+                $"К процессу {indicator.Process.ProcessName} " +
+                $"добавлен показатель {indicator.Name}." +
+                " Для просмотра изменений перейдите в анализ");
+        }
 
         await repository.Add(indicator);
         await repository.SaveChangesAsync();
@@ -85,6 +96,15 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         var record = mapper.Map<Record>(dto);
         record.Indicator = baseService.GetIndicatorById(dto.IndicatorId);
 
+        var subs = await subscriptionService.GetAllSubscribers(record.Indicator.Process.Id);
+
+        foreach (var sub in subs)
+        {
+            await subscriptionService.Notify(sub.User.Id,
+                $"К покзателю {record.Indicator.Name} " +
+                $"добавлена запись. Для просмотра изменений перейдите в анализ");
+        }
+        
         await repository.Add(record);
         await repository.SaveChangesAsync();
         
@@ -189,6 +209,19 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         var entities = repository.GetAll<Record>()
             .Where(i => i.Indicator.Id == indicatorId)
             .Include(c => c.Indicator).AsQueryable();
+
+        return entities;
+    }
+    
+    public int GetCountOfNotifications(Guid userId)
+    {
+        var user = baseService.GetUserById(userId);
+        return repository.Get<Notification>(notification => notification.User == user).Count();
+    }
+    public async Task<IEnumerable<Notification>> GetNotifications(Guid userId)
+    {
+        var entities = repository.GetAll<Notification>()
+            .Where(i => i.User.Id == userId).AsQueryable();
 
         return entities;
     }
