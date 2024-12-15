@@ -115,8 +115,7 @@ public class AdminController(IAdminService adminService, IBaseService baseServic
     /// <returns>
     /// The updated user details.
     /// </returns>
-    [HttpPut]
-    [Route("SetUserBlockStatus")]
+    [HttpPut("SetUserBlockStatus")]
     [ProducesResponseType(typeof(ResponseDto<UserDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]

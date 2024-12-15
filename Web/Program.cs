@@ -8,8 +8,15 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-builder.Services.AddCors();
-builder.Services.AddCors(opt => opt.AddDefaultPolicy(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -34,7 +41,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Controllers Configuration
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+});
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -48,9 +59,7 @@ builder.Services.AddAutoMapper(typeof(IndicatorProfile));
 builder.Services.AddAutoMapper(typeof(ProcessProfile));
 builder.Services.AddAutoMapper(typeof(RecordProfile));
 
-// Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDbRepository, DbRepository>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
@@ -67,7 +76,18 @@ builder.Services.AddScoped<IPhotoService, PhotoService>();
 var app = builder.Build();
 
 #region Middleware
-app.UseCors();
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("AllowLocalhost");
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Static Files Configuration
 var baseDirectory = Directory.GetParent(Environment.CurrentDirectory)?.ToString() ?? Environment.CurrentDirectory;
 var filesFolderPath = Path.Combine(baseDirectory, "files");
@@ -79,16 +99,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(filesFolderPath),
     RequestPath = "/files"
 });
-
-app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
-
-app.UseRouting();
-
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 #endregion
 
@@ -102,8 +112,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 #region Initialize Database
 

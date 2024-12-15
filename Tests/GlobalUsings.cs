@@ -1,0 +1,15 @@
+﻿global using System.Security.Cryptography;
+global using System.Text;
+global using Application.DTO;
+global using Application.Exceptions;
+global using Application.Mappings;
+global using Application.Services;
+global using AutoMapper;
+global using Core.Models;
+global using FluentAssertions;
+global using Infrastructure.Repository;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using Tests.Services.Base;
+global  using Application.Services.Base;

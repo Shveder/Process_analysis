@@ -1,14 +1,12 @@
 ﻿namespace Application.Services;
 
 [AutoInterface]
-public class PhotoService(ILogger<PhotoService> logger) : IPhotoService
+public class PhotoService : IPhotoService
 {
     private const string RootLocation = "uploads";
 
     public async Task SavePhotoAsync(Guid id, Stream fileStream, string type)
      {
-         try
-         {
              var location = type == "user"? $"users/{id}" : $"processes/{id}";
              var userDir = Path.Combine(RootLocation, location);
              Directory.CreateDirectory(userDir);
@@ -24,18 +22,10 @@ public class PhotoService(ILogger<PhotoService> logger) : IPhotoService
              // Сохраняем новый файл
              await using var file = File.Create(filePath);
              await fileStream.CopyToAsync(file);
-         }
-         catch (Exception ex)
-         {
-             logger.LogError($"Не удалось сохранить фото {id}: {ex.Message}");
-             throw;
-         }
      }
 
     public async Task<Stream> GetPhotoAsync(Guid id, string type)
     {
-        try
-        {
             var location = type == "user"? $"users/{id}" : $"processes/{id}";
             var filePath = Path.Combine(RootLocation, location, $"{id}.jpg");
 
@@ -45,11 +35,5 @@ public class PhotoService(ILogger<PhotoService> logger) : IPhotoService
             }
 
             return await Task.FromResult(File.OpenRead(filePath));
-        }
-        catch (Exception ex)
-        {
-            logger.LogError($"Не удалось получить фото {id}: {ex.Message}");
-            throw;
-        }
     }
 }
