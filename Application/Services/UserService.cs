@@ -12,7 +12,7 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
         prevPassword = Hash(prevPassword);
         prevPassword = Hash(prevPassword + user?.Salt);
         
-        if (!(prevPassword == user.Password))
+        if (!(prevPassword == user?.Password))
             throw new IncorrectDataException("Password is incorrect!");
         
         if (prevPassword == request.NewPassword)

@@ -12,4 +12,7 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Logging;
 global using Moq;
 global using Tests.Services.Base;
-global  using Application.Services.Base;
+global using Application.Services.Base;
+global using System.Net;
+global using System.Net.Http.Json;
+global using Microsoft.AspNetCore.Mvc.Testing;
