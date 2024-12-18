@@ -22,7 +22,7 @@ public class UserService(IDbRepository repository, IMapper mapper, IBaseService 
             throw new IncorrectDataException("Password must be between 4 and 32 characters long!");
         
         request.NewPassword = Hash(request.NewPassword);
-        request.NewPassword = Hash(request.NewPassword + user?.Salt);
+        request.NewPassword = Hash(request.NewPassword + user.Salt);
         
         user.Password = request.NewPassword;
         user.DateUpdated = DateTime.UtcNow;

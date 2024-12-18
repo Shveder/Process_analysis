@@ -3,14 +3,6 @@
 [AutoInterface]
 public class BaseService(IDbRepository repository) : IBaseService
 {
-    private Company GetCompanyById(Guid id)
-    {
-        var company = repository.Get<Company>(model => model.Id == id).FirstOrDefault();
-        if (company == null)
-            throw new IncorrectDataException("There is not company with this Id");
-        
-        return company;
-    }
 
     public Process GetProcessById(Guid id)
     {
