@@ -90,4 +90,18 @@ public class ProcessController(IProcessService processService) : ControllerBase
         
         return Ok(new ResponseDto<IEnumerable<Process>>(CommonStrings.SuccessResult, data: entity));
     }
+    
+    /// <summary>
+    /// Retrieves processes by companyId.
+    /// </summary>
+    /// <returns>An IActionResult containing the list of all processes.</returns>
+    [HttpGet("GetProcessesByCompanyId")]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    public virtual async Task<IActionResult> GetProcessesByCompanyId(Guid companyId)
+    {
+        var entity = await processService.GetProcessesByCompanyId(companyId);
+        
+        return Ok(new ResponseDto<IEnumerable<Process>>(CommonStrings.SuccessResult, data: entity));
+    }
 }

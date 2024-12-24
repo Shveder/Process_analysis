@@ -22,6 +22,8 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     
     public DbSet<Record> Records { get; set; }
     
+    public DbSet<Access> Accesses{ get; set; }
+    
     public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
     {
         public DataContext CreateDbContext(string[] args)

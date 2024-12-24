@@ -31,4 +31,13 @@ public class BaseService(IDbRepository repository) : IBaseService
         
         return indicator;
     }
+    
+    public Company GetCompanyById(Guid id)
+    {
+        var company = repository.Get<Company>(model => model.Id == id).FirstOrDefault();
+        if (company == null)
+            throw new IncorrectDataException("There is no company with this id");
+        
+        return company;
+    }
 }

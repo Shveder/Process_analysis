@@ -125,4 +125,38 @@ public class AdminController(IAdminService adminService, IBaseService baseServic
         
         return Ok(new ResponseDto<UserDto>(CommonStrings.SuccessResultPut, data:userDto));
     }
+    
+    /// <summary>
+    /// Add access to user.
+    /// </summary>
+    /// <param name="dto">The DTO containing the information of the access to create.</param>
+    /// <returns>
+    /// The created company details.
+    /// </returns>
+    [HttpPost("AddAccessToUser")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddAccessToUser([FromBody] AccessDto dto)
+    {
+        await adminService.AddAccessToUser(dto);
+        
+        return Ok(new ResponseDto<AccessDto>(CommonStrings.SuccessResultPost));
+    }
+    
+    /// <summary>
+    /// Getting is user has access.
+    /// </summary>
+    /// <param name="dto">The DTO containing the information of the access to check.</param>
+    /// <returns>
+    /// The created company details.
+    /// </returns>
+    [HttpGet("GetIsAccessed")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(ResponseDto<object>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetIsAccessed(Guid userId, Guid companyId)
+    {
+        return Ok(adminService.GetIsAccessed(userId, companyId));
+    }
 }

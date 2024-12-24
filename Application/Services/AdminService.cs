@@ -1,7 +1,7 @@
 ﻿namespace Application.Services;
 
 [AutoInterface]
-public class AdminService(IDbRepository repository, IMapper mapper) : IAdminService
+public class AdminService(IDbRepository repository, IMapper mapper, IBaseService baseService) : IAdminService
 {
     public async Task<IQueryable<User>> GetAllUsers()
     {
@@ -72,5 +72,34 @@ public class AdminService(IDbRepository repository, IMapper mapper) : IAdminServ
         await repository.SaveChangesAsync();
 
         return mapper.Map<UserDto>(existingUser);
+    }
+
+    public async Task AddAccessToUser(AccessDto request)
+    {
+        if (GetIsAccessed(request.UserId, request.CompanyId))
+            throw new IncorrectDataException("You already have access.");
+        
+        var user = baseService.GetUserById(request.UserId);
+        var company = baseService.GetCompanyById(request.CompanyId);
+
+        var access = new Access()
+        {
+            User = user,
+            Company = company
+        };
+        await repository.Add(access);
+        await repository.SaveChangesAsync();
+    }
+    
+    public bool GetIsAccessed(Guid userId, Guid companyId)
+    {
+        var user = baseService.GetUserById(userId);
+        var company = baseService.GetCompanyById(companyId);
+    
+        var access = repository.Get<Access>(access =>
+            access.Company == company
+            && access.User == user).FirstOrDefault();
+        
+        return access != null;
     }
 }

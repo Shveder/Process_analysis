@@ -66,4 +66,12 @@ public class ProcessService(IDbRepository repository, IMapper mapper) : IProcess
         
         return company;
     }
+    
+    public async Task<IEnumerable<Process>> GetProcessesByCompanyId(Guid companyId)
+    {
+        var entities = repository.GetAll<Process>().Where(process => process.Company.Id == companyId)
+            .Include(process => process.Company).AsQueryable();
+        
+        return entities;
+    }
 }
